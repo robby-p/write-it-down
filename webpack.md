@@ -28,9 +28,22 @@ _From [Webpack.js.org](https://webpack.js.org/glossary)_
 **plugins:** called by the webpack compiler, giving access to the entire compilation lifecycle. These packages will typically extend compilation functionality
 
 - _plugins we use_
+
   - SourceMap: Used for customization beyond that which is provided by webpack. Specifically so we can host our sourcemaps on our internal storage system and restrict access to them .
   - ContextReplacement: To support locales, _we generate a bundle for every locale_ Each bundle will exclusively only contain relevant translation data for its given locale.
   - MiniCssExtract: This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS
+  - DefinePlugin: The DefinePlugin allows you to create global constants which can be configured at compile time.
+  - EnvironmentPlugin: shorthand for using the DefinePlugin on process.env keys.
+
+    ```js
+    new webpack.EnvironmentPlugin(["NODE_ENV", "DEBUG"]);
+    // is equivalent to...
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.DEBUG": JSON.stringify(process.env.DEBUG),
+    });
+    ```
+
   - HtmlWebpack: simplifies creation of HTML files to serve our webpack bundles. **Currently only utilized internally to the FE team.** [This PR](https://code.squarespace.net/projects/SERVICE/repos/account-service/pull-requests/988/overview) utilizes this plugin so we can serve static html for our acceptance testing, greatly simplifying the old process. Futher development may allow statically generated html builds which prerender the skeleton of the UI for faster load times, actual and perceived
   - CheckES5Webpack: A slightly 'janky' module that acts as a stop gap to detect if any js syntax other than es5 (ie11 compatible) is present in the resulting bundles.
 
